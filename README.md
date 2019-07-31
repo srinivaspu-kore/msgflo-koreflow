@@ -15,14 +15,14 @@ The following languages and conventions are used in this project
 * Coffee Script - Transpiler to convert to Javascript
 
 ### Project Structure
-
+'''
 |--graphs - Directory holds all the graphs and subgraphs related to koreflow engine
 |--components - Contains Noflo components used to create NoFlo Graphs (as Msgflo Participant)
 |--participants - Contains different Msgflo Participants that will be used to design various workflow    
 |                usecases
 |--src - Application Source Code
 |--index.js - Index file
-|--package.json - Dependency management
+|--package.json - Dependency management'''
 
 
 ### Download git repo
