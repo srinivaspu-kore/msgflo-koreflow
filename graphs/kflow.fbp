@@ -1,0 +1,4 @@
+webhook(koreflow/KFlowHttp) PROCESS -> START newprocess(msgflo-koreflow/newprocess)
+newprocess OUT -> IN logger(koreflow/KFlowLogger)
+newprocess ERROR  -> IN logger
+

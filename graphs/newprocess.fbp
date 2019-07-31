@@ -1,0 +1,12 @@
+# File: graphs/newprocess.fbp
+INPORT=Process.IN:START
+OUTPORT=Instance.ERROR:ERROR
+OUTPORT=Context.ERROR:ERROR
+OUTPORT=Transition.ERROR:ERROR
+OUTPORT=State.OUT:OUT
+
+Process(msgflo-koreflow/ProcessInit) OUT -> IN Instance(msgflo-koreflow/WFInstance)
+Instance OUT -> IN Context(msgflo-koreflow/WFContextUpdate)
+Context OUT -> IN Transition(msgflo-koreflow/WFStateTransition)
+Transition OUT -> IN State(msgflo-koreflow/WFStateUpdate)
+
