@@ -22,7 +22,7 @@ exports.getComponent = ->
   c.process (input, output) ->
      # return unless input.hasData 'in'
     data = input.getData 'in' 
-    debug "received", data
+    # debug "received", data
    
     output.send
         out: data

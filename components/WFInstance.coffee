@@ -1,5 +1,9 @@
 noflo = require 'noflo'
+mongoose = require 'mongoose'
+WFProcessDefn = require '../src/models/WFProcessDefn'
+WFProcessInstance = require '../src/models/WFProcessInstance'
 debug = require('debug')('koreflow:WFInstance')
+_ = require('lodash')
 
 exports.getComponent = ->
   c = new noflo.Component
@@ -18,13 +22,71 @@ exports.getComponent = ->
     datatype: 'all'
     description: 'Split off elements from the input
      string (one element per IP)'
+  c.outPorts.add 'pending',
+    datatype: 'all'
+    description: 'Split off elements from the input
+     string (one element per IP)'
 
   c.process (input, output) ->
     # return unless input.hasData 'in'
-    data = input.getData 'in' 
-    debug "received", data
+    payload = input.getData 'in' 
+    debug "received", payload
 
-    output.send
-        out: data
+    processDefn = WFProcessDefn.model.findById(payload.workflowId)
+    
+    processDefn.then((defn) ->
+      defaultStep = defn.steps[0].id
+      stepId = payload.stepId || defaultStep
+      assignee = 'test@kore.com'
 
-    output.done()
+      debug 'stepId --> ', stepId 
+
+      WFProcessInstance.model.findById(payload.workflowProcessId)
+      .then((process) ->
+        if !process 
+          debug 'creating new process'
+          return WFProcessInstance.model.create({
+            workflowId: payload.workflowId,
+            data: payload.data,  
+            context: payload.context, 
+            pendingSteps: [{stepId: defaultStep, assignee}]
+           })
+          .then((savedProcess) ->
+            return savedProcess
+          ) 
+
+        return process
+      )
+      .then((process) ->
+        if process.pendingSteps
+          ind = _.findIndex(process.pendingSteps, {stepId})
+
+          if ind is -1
+            throw new Error("The workflow has already executed step #{stepId} or step #{stepId} is not declared in the definition")
+          else 
+            process.pendingSteps.splice(ind, 1)
+
+        debug 'process.pendingSteps', process.pendingSteps
+        
+        return process.save()
+        .then(() -> 
+          return process
+        );
+      )
+      .then((process) ->
+        debug 'process', process
+
+        if !_.isEmpty(process.pendingSteps) and _.findIndex(process.pendingSteps, {stepId}) isnt -1
+          return output.sendDone
+            pending: {
+              message: "'Async Step #{stepId} is in pending state'"
+            }
+        else 
+          payload.workflowProcessId = process._id
+          output.sendDone
+            out: payload
+      )
+    )   
+    .catch((error)->
+      output.done error if error
+    )

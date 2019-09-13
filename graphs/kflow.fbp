@@ -1,4 +1,7 @@
-webhook(koreflow/KFlowHttp) PROCESS -> START newprocess(msgflo-koreflow/newprocess)
-newprocess OUT -> IN logger(koreflow/KFlowLogger)
-newprocess ERROR  -> IN logger
+webhook(koreflow/HttpApi) PROCESS -> START apply_leave(koreflow/apply_leave)
 
+apply_leave OK -> START approve_leave(koreflow/approve_leave)
+apply_leave ERR -> IN Display(koreflow/KFlowLogger)
+
+approve_leave OK -> IN Display
+approve_leave ERR -> IN Display

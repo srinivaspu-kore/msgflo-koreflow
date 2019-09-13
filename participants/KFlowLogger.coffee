@@ -1,6 +1,6 @@
 uuid = require 'uuid'
 msgfloNodejs = require 'msgflo-nodejs'
-debug = require('debug')('koreflow:KFlowHttp')
+debug = require('debug')('koreflow:KFlowLogger')
 
 KFlowLogger = (client, role) ->
   id = process.env.DYNO or uuid.v4()

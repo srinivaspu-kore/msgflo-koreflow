@@ -47,7 +47,7 @@ export DEBUG=*
 
 * Run the entire service
 
-    ** node index.js
+    ** npm start
 
 * Run the KoreFlow Graph
 
@@ -55,7 +55,7 @@ export DEBUG=*
 
 * Run the Noflo Graph as Participant
 
-    ** noflo-runtime-msgflo --name newprocess --graph msgflo-example-imageresize/newprocess
+    ** noflo-runtime-msgflo --name newprocess --graph msgflo-koreflow/newprocess
 
 * Run NoFlo IDE locally to visualize your graphs
 
