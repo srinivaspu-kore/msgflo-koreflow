@@ -1,0 +1,19 @@
+# File: graphs/newprocess.fbp
+INPORT=Process.IN:START
+
+OUTPORT=ErrorRelay.ERROR:ERR
+OUTPORT=State.OUT:OK
+
+Process(msgflo-koreflow/ProcessInit) OUT -> IN Instance(msgflo-koreflow/WFInstance)
+Instance OUT -> IN Context(msgflo-koreflow/WFContextUpdate)
+Context OUT -> IN Transition(msgflo-koreflow/WFStateTransition)
+Transition OUT -> IN State(msgflo-koreflow/WFStateUpdate)
+
+Process ERROR -> IN ErrorRelay(msgflo-koreflow/ErrorRelay)
+Instance ERROR -> IN ErrorRelay
+Context ERROR -> IN ErrorRelay
+Transition ERROR -> IN ErrorRelay
+State ERROR -> IN ErrorRelay
+
+Instance PENDING -> IN ErrorRelay
+
