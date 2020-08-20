@@ -39,7 +39,7 @@
   "dependencies": {
     "amqplib": "^0.5.1",
     "arrivals": "^2.1.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "browser-process-hrtime": "^0.1.2",
